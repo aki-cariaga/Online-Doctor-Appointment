@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FaCheck, FaEnvelope, FaLock, FaTimes, FaUser } from 'react-icons/fa';
 import SocialSignUp from './SocialSignUp';
-import { createAccountWithEmail } from './LoginManager';
 import Spinner from 'react-bootstrap/Spinner'
 import swal from 'sweetalert';
 import axios from 'axios';
@@ -16,9 +15,7 @@ import axios from 'axios';
 // Minimum eight in length .{8,} (with the anchors)
 
 
-const SignUp = ({ handleResponse }) => {
-    const [error, setError] = useState({})
-    const [loading, setLoading] = useState(false);
+const SignUp = () => {
     const [user, setUser] = useState({username: '', email:'', password: ''})
     const [passwordValidation, setPasswordValidation] = useState({
         carLength: false,
@@ -90,16 +87,6 @@ const SignUp = ({ handleResponse }) => {
         catch(err){
             console.log(err)
         }
-        // console.log(user)
-        // setLoading(true)
-        // createAccountWithEmail(user.displayName, user.email, user.password)
-        //     .then(res => {
-        //         handleResponse(res)
-        //         setLoading(false)
-        //         
-        //     })
-
-        
     }
     return (
         <form className="sign-up-form" onSubmit={hanldeOnSubmit}>
@@ -116,7 +103,7 @@ const SignUp = ({ handleResponse }) => {
                 <span className="fIcon"><FaLock /></span>
                 <input type="password" name="password" placeholder="password" onChange={(e) => hanldeOnChange(e)} />
             </div>
-            {error.length && <h6 className="text-danger text-center">{error}</h6>}
+            {/* {error.length && <h6 className="text-danger text-center">{error}</h6>} */}
             <button type="submit"
                 className="btn btn-primary btn-block mt-2 iBtn"
                 // disabled={

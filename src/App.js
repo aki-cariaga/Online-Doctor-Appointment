@@ -7,14 +7,6 @@ import {
 } from "react-router-dom";
 import { Suspense } from 'react';
 
-//previous imported component
-// import Home from './components/Home/Home/Home';
-// import Dashboard from './components/Dashboard/Dashboard/Dashboard';
-// import AppointMent from './components/AppointMent/AppointMent/AppointMent';
-// import AllPatients from './components/AppointMent/AllPatients/AllPatients';
-// import SignInForm from './components/Login/LoginMain/SignInForm';
-
-
 import AddDoctor from './components/Dashboard/AddDoctor/AddDoctor';
 import PrivateRoute from './components/Login/PrivateRoute/PrivateRoute';
 import { getDecodeUser } from './components/Login/LoginMain/LoginManager';
