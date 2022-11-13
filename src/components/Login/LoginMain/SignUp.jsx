@@ -4,6 +4,7 @@ import SocialSignUp from './SocialSignUp';
 import { createAccountWithEmail } from './LoginManager';
 import Spinner from 'react-bootstrap/Spinner'
 import swal from 'sweetalert';
+import axios from 'axios';
 
 
 // password regex
@@ -18,7 +19,7 @@ import swal from 'sweetalert';
 const SignUp = ({ handleResponse }) => {
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState({username: '', email:'', password: ''})
     const [passwordValidation, setPasswordValidation] = useState({
         carLength: false,
         specailChar: false,
@@ -68,34 +69,44 @@ const SignUp = ({ handleResponse }) => {
             setUser(newPass)
         }
     }
-    const hanldeOnSubmit = (e) => {
-        setLoading(true)
-        createAccountWithEmail(user.displayName, user.email, user.password)
-            .then(res => {
-                handleResponse(res)
-                setLoading(false)
-                if (!res.error) {
-                    swal({
-                        icon: "success",
-                        text: "Successfully Sign Up",
-                        timer: 2000
-                    });
-                }
-                if (res.error) {
-                    setLoading(false)
-                    setError(res.error)
-                    console.log(res.error)
-                }
-            })
-
+    const hanldeOnSubmit = async(e) => {
         e.preventDefault();
+        try{
+            const res = await axios.post('http://localhost:5000/auth/register', user)
+            // console.log(res);
+            // if (!res.error) {
+                //             swal({
+                //                 icon: "success",
+                //                 text: "Successfully Sign Up",
+                //                 timer: 2000
+                //             });
+                //         }
+                //         if (res.error) {
+                //             setLoading(false)
+                //             setError(res.error)
+                //             console.log(res.error)
+                //         }
+        }
+        catch(err){
+            console.log(err)
+        }
+        // console.log(user)
+        // setLoading(true)
+        // createAccountWithEmail(user.displayName, user.email, user.password)
+        //     .then(res => {
+        //         handleResponse(res)
+        //         setLoading(false)
+        //         
+        //     })
+
+        
     }
     return (
         <form className="sign-up-form" onSubmit={hanldeOnSubmit}>
             <h2 className="title">Sign Up</h2>
             <div className="input-field">
                 <span className="fIcon"><FaUser /></span>
-                <input placeholder="Name" name="displayName" type="text" onChange={(e) => hanldeOnChange(e)} />
+                <input placeholder="Name" name="username" type="text" onChange={(e) => hanldeOnChange(e)} />
             </div>
             <div className="input-field">
                 <span className="fIcon"><FaEnvelope /></span>
@@ -108,11 +119,12 @@ const SignUp = ({ handleResponse }) => {
             {error.length && <h6 className="text-danger text-center">{error}</h6>}
             <button type="submit"
                 className="btn btn-primary btn-block mt-2 iBtn"
-                disabled={
-                    passwordValidation.carLength && passwordValidation.numeric && passwordValidation.upperLowerCase && passwordValidation.specailChar && emailError.emailError ? "" : true
-                }
+                // disabled={
+                //     passwordValidation.carLength && passwordValidation.numeric && passwordValidation.upperLowerCase && passwordValidation.specailChar && emailError.emailError ? "" : true
+                // }
             >
-                {loading ? <Spinner animation="border" variant="info" /> : "Sign Up"}
+                Sign UP
+                {/* {loading ? <Spinner animation="border" variant="info" /> : "Sign Up"} */}
             </button>
 
             <div className="password-validatity mx-auto">

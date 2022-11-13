@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import firebase from 'firebase/app';
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
@@ -14,33 +14,41 @@ const Login = () => {
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
+  const [credentials, setCredentials] = useState({username: '', password: ''});
+
+  const handleChange = (e) =>{
+    setCredentials((prev) => (
+      {...prev, [e.target.name]: e.target.value}
+    ))
+  }
   const { from } = location.state || { from: { pathname: "/" } };
 
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  // if (firebase.apps.length === 0) {
+  //   firebase.initializeApp(firebaseConfig);
+  // }
 
   const handleGoogleSignIn = () => {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-      const { displayName, email } = result.user;
-      const signedInUser = { name: displayName, email }
-      setLoggedInUser(signedInUser);
-      storeAuthToken();
-    }).catch(function (error) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
-    });
+
+    // var provider = new firebase.auth.GoogleAuthProvider();
+    // firebase.auth().signInWithPopup(provider).then(function (result) {
+    //   const { displayName, email } = result.user;
+    //   const signedInUser = { name: displayName, email }
+    //   setLoggedInUser(signedInUser);
+    //   storeAuthToken();
+    // }).catch(function (error) {
+    //   const errorMessage = error.message;
+    //   console.log(errorMessage);
+    // });
   }
 
   const storeAuthToken = () => {
-    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
-      .then(function (idToken) {
-        sessionStorage.setItem('token', idToken);
-        history.replace(from);
-      }).catch(function (error) {
-        // Handle error
-      });
+    // firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    //   .then(function (idToken) {
+    //     sessionStorage.setItem('token', idToken);
+    //     history.replace(from);
+    //   }).catch(function (error) {
+    //     // Handle error
+    //   });
   }
 
 
@@ -52,14 +60,14 @@ const Login = () => {
         <div className="col-md-6 col-sm-6 shadow p-5">
           <div className="form-group">
             <label htmlFor="">User Name</label>
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" name="username" onChange={handleChange}/>
           </div>
           <div className="form-group">
             <label htmlFor="">Password</label>
-            <input type="password" className="form-control" />
+            <input type="password" className="form-control" name="password" onChange={handleChange}/>
           </div>
-          <div className="form-group">
-            <label htmlFor="" className="text-danger">Forgot your password?</label>
+          <div className="form-group" id="forgotPass">
+            <label htmlFor="forgotPass" className="form-label text-danger">Forgot your password?</label>
           </div>
           <br />
           <p>Or <br /> Sign In With Google</p>
