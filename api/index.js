@@ -5,6 +5,9 @@ import fileUpload from 'express-fileupload';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import doctorRoutes from './routes/doctor.js'
+import authRoutes from './routes/auth.js'
+import cookieParser from 'cookie-parser';
+
 
 const port = 5000;
 
@@ -16,6 +19,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('doctors'));
 app.use(fileUpload());
+app.use(cookieParser())
 
 mongoose.connection.on("disconnected", () =>{
     console.log("Disconnected")
@@ -29,17 +33,18 @@ const connect = async () =>{
     }
 }
 app.use('/', doctorRoutes)
+app.use('/auth', authRoutes);
 app.get('/', (req, res) => {
     res.send("hello it/s running")
 })
 
 app.use((err, req, res, next) =>{
-    const status = res.status || 500;
-    const msg = res.message || "Something Went Wrong";
-    return res.status(status).json({
+    const errorStatus = err.status || 500;
+    const msg = err.message || "Something Went Wrong";
+    return res.status(errorStatus).json({
         success: false,
         message: msg,
-        status: status,
+        status: errorStatus,
         stack : err.stack,
     })
 })
