@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import SocialSignUp from './SocialSignUp';
 import { useForm } from "react-hook-form";
@@ -6,9 +6,11 @@ import { hanldeSignInWithEmailAndPass } from './LoginManager';
 import { useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import axios from 'axios';
+import { AuthContext } from '../../../context/AuthContext';
 
 
 const SignIn = () => {
+    const {loading, err, user, dispatch} = useContext(AuthContext);
     const [credentials, setCredentials] = useState({email: '', password: ''});
     // const [loading, setLoading] = useState(false);
     // const [err, setErr] = useState({})
@@ -17,13 +19,14 @@ const SignIn = () => {
         e.preventDefault();
         try{
             const fetchData = await axios.post('http://localhost:5000/auth/login', credentials);
+            dispatch({type: "LOGIN_SUCCESS",payload: fetchData.details});
             console.log(fetchData)
         }
         catch(err){
             console.log(err)
         }
         e.preventDefault();
-        console.log(credentials)
+        // console.log(credentials)
         // setLoading(true)
         // const { email, password } = data
         // hanldeSignInWithEmailAndPass(email, password)
@@ -37,6 +40,7 @@ const SignIn = () => {
         //     })
 
     }
+    console.log("dagaaaaa", user)
     const handleChange = (e) =>{
         setCredentials((prev) => ({...prev, [e.target.name]: e.target.value}))
     }
